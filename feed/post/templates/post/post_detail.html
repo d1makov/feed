@@ -1,0 +1,26 @@
+{% extends 'post/base.html' %}
+
+{% load static %}
+
+{% block breadcrumb %}{{ block.super }} > {{ post.title }} {% endblock %}
+
+{% block content %}
+
+    <div class="blog-item">
+            <h2>{{ post.title }} </h2>
+            <div class="info">
+                By <span><a href="#">{{ post.author }}</a></span> | On <span>{{ post.creation_date }}</span>
+            </div>
+            <p> {{ post.body  }}</p>
+        </div>
+
+    <div class="form">
+        <form action="" method="post" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <p><input type="submit" value="Mark as seen"></p>
+        </form>
+    </div>
+
+
+{% endblock %}

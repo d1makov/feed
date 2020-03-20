@@ -1,0 +1,27 @@
+{% extends 'post/base.html' %}
+
+{% block content %}
+    <div class="col-lg-4">
+        <h2>People</h2>
+        <div class="blog-item">
+        {% for user in users %}
+            {{ user.username }}
+            {% if not user in friends %}
+                <a href="#">
+                <button type="button" class="btn btn-success">Follow</button>
+                </a>
+            {% endif %}
+        {% endfor %}
+
+        <h2>Following</h2>
+        {% for follow in follows %}
+            <a href="#">
+                {{ follow.username }}
+            </a>
+            <a href="#">
+            <button type="button" class="btn btn-default">Unfollow</button>
+            </a>
+        {% endfor %}
+            </div>
+    </div>
+{% endblock %}

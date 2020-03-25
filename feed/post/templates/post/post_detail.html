@@ -15,10 +15,10 @@
         </div>
 
     <div class="form">
-        <form action="" method="post" novalidate>
-            {% csrf_token %}
-            {{ form.as_p }}
-            <p><input type="submit" value="Mark as seen"></p>
+        <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Update">
+</form>
         </form>
     </div>
 

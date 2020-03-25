@@ -1,4 +1,5 @@
 {% extends 'post/base.html' %}
+
 {% block content %}
     {% for post in posts %}
         <div class="blog-item">
@@ -7,7 +8,11 @@
                 By <span><a href="#">{{ post.author }}</a></span> | On <span>{{ post.creation_date }}</span>
             </div>
             <p> {{ post.body | truncatewords:30 }}</p>
-
+                {% if post.read == True %}
+                    <h6>seen</h6>
+                {% else %}
+                    <h6>Unseen. open to read</h6>
+                {% endif %}
         </div>
     {% empty %}
         <div>

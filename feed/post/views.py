@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, TemplateView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView, UpdateView
 from django.views import View
 # Create your views here.
 from .models import Post, Follower
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.contrib.auth.views import LoginView, LogoutView
 
 from django.contrib.auth.models import User
 
@@ -35,6 +36,8 @@ class UsersView(TemplateView):
 
 @method_decorator(login_required, name='dispatch')
 class Dashboard(View):
+    login_url = 'post/login.html'
+
     def get(self, request, *args, **kwargs):
         view = Home.as_view(
             template_name = 'post/admin_page.html',
@@ -48,8 +51,8 @@ class PostDetail(DetailView):
 
     def get_object(self):
         object = super(PostDetail, self).get_object()
-        object.read = True
-        object.save()
+        # object.read = True
+        # object.save()
         return object
 
 
@@ -61,3 +64,24 @@ class PostCreate(CreateView):
         form.instance.author = self.request.user
         form.save()
         return super(PostCreate, self).form_valid(form)
+
+
+# @login_required(login_url='/accounts/login/')
+class FeedView(UpdateView):
+    template_name = 'post/feed.html'
+
+    def get(self, request, *args, **kwargs):
+        follows = Follower.objects.get(current_user=request.user)
+        follows = follows.users.all()
+        posts = Post.objects.all().filter(author__in=follows).order_by('-creation_date')
+        args = {
+            'posts': posts, 'follows': follows
+        }
+        return render(request, self.template_name, args)
+
+
+class MarkAsReadView(UpdateView):
+    model = Post
+    fields = ['read']
+    template_name = 'post/feed.html'
+

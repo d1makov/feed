@@ -1,0 +1,29 @@
+{% extends 'post/base.html' %}
+
+{% load static %}
+
+{% block breadcrumb %}{{ block.super }} > Feed {% endblock %}
+
+{% block content %}
+    {% for post in posts %}
+    <div class="blog-item">
+        <h1>{{ post.author }}</h1>
+            <h2>{{ post.title }} </h2>
+            <div class="info">
+                Created On <span>{{ post.creation_date }}</span>
+            </div>
+            <p> {{ post.body  }}</p>
+            {% if post.read == False %}
+                <form action="" method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <p><input type="submit" value="Mark as seen"></p>
+                </form>
+            {% else %}
+                <button type="button" class="btn btn-success">Mark as unseen</button>
+            {% endif %}
+        </div>
+    {% endfor %}
+    {% include 'post/pagination_links.html' %}
+
+{% endblock %}
